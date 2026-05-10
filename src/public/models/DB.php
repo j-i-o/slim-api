@@ -5,10 +5,10 @@ class DB {
 
     public static function getConnection() {
         if (!self::$connection) {
-            $host = 'db';
+            $host = 'localhost';
             $dbname = 'seminariophp';
-            $user = 'seminariophp';
-            $pass = 'seminariophp';
+            $user = 'root';
+            $pass = 'admin';
 
             try {
                 self::$connection = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
