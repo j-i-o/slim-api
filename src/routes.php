@@ -11,7 +11,6 @@ use App\Controllers\UserController;
 use App\Controllers\AssetController;
 
 require_once __DIR__ . '/Models/DB.php';
-require_once __DIR__ . '/Controllers/UserController.php';
 require_once __DIR__ . '/Utils/validations.php';
 
 return function (App $app) {
