@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Middleware;
+namespace App\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -16,7 +16,7 @@ class IsLoggedMiddleware implements Middleware
 {
 	private ResponseFactoryInterface $responseFactory;
 	
-	public static $secret = 'superSecret';
+	public static $secret = '9f2e8d4c1a7b6f3d0c8e5b2a1f9d7c6e4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9';
 
 	public function __construct() {
 			$this->responseFactory = new \Slim\Psr7\Factory\ResponseFactory();
