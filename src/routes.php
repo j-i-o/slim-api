@@ -9,6 +9,7 @@ use Firebase\JWT\JWT;
 use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use App\Controllers\AssetController;
+use App\Controllers\TradeController;
 
 require_once __DIR__ . '/Models/DB.php';
 require_once __DIR__ . '/Utils/validations.php';
@@ -40,6 +41,11 @@ return function (App $app) {
 
 	$app->group('/assets', function (Group $group) {
 		$group->get('', AssetController::class . '::getAssets');
-		$group->put('', AssetController::class . '::updateAssetsPrice');
+		$group->put('', AssetController::class . '::updateAssetsPrice')->add(IsLoggedMiddleware::class);
 	});
+
+	$app->group('/trade', function (Group $group) {
+		$group->post('/buy', TradeController::class . '::buyAsset');
+		$group->post('/sell', TradeController::class . '::sellAsset');
+	})->add(IsLoggedMiddleware::class);
 };
