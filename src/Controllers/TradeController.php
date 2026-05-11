@@ -49,10 +49,21 @@ class TradeController {
 			$stmtActBalance = $db->prepare("UPDATE users SET balance = balance - :amount WHERE id = :id");
 			$stmtActBalance->execute([':amount' => $precioTotal, ':id' => $userId]);
 
-			// Actualizar portfolio
-			$stmtInsertPortfolio = $db->prepare("INSERT INTO portfolio (user_id, asset_id, quantity) VALUES (:user_id, :asset_id, :quantity)");
-			$stmtInsertPortfolio->execute([':user_id' => $userId, ':asset_id' => $assetId, ':quantity' => $quantity]);
-			
+			//Me traigo el portfolio del usuario, si existe update, sino insert
+			$stmtPortfolio = $db->prepare("SELECT * FROM portfolio WHERE user_id = :user_id AND asset_id = :asset_id");
+			$stmtPortfolio->execute([":user_id" => $userId, ":asset_id" => $assetId]);
+			$portfolio = $stmtPortfolio->fetch(PDO::FETCH_ASSOC);
+
+			if($portfolio) {
+				//Si existe actualizo
+				$quantity = $quantity + $portfolio['quantity'];
+				$stmtInsertPortfolio = $db->prepare("UPDATE portfolio SET quantity = :quantity WHERE id = :id");
+				$stmtInsertPortfolio->execute([':id' => $portfolio['id'], ':quantity' => $quantity]);
+			}else {
+				//Sino inserto
+				$stmtInsertPortfolio = $db->prepare("INSERT INTO portfolio (user_id, asset_id, quantity) VALUES (:user_id, :asset_id, :quantity)");
+				$stmtInsertPortfolio->execute([':user_id' => $userId, ':asset_id' => $assetId, ':quantity' => $quantity]);
+			}
 			// Registrar transacción
 			$stmtInsertTransactions = $db->prepare("INSERT INTO transactions (user_id, asset_id, transaction_type, quantity, price_per_unit, total_amount, transaction_date) VALUES (:user_id, :asset_id, :transaction_type, :quantity, :price_per_unit, :total_amount, :transaction_date)");
 			$stmtInsertTransactions->execute([
