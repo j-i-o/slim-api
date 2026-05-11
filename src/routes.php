@@ -10,6 +10,7 @@ use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use App\Controllers\AssetController;
 use App\Controllers\TradeController;
+use App\Controllers\PortfolioController;
 
 require_once __DIR__ . '/Models/DB.php';
 require_once __DIR__ . '/Utils/validations.php';
@@ -47,5 +48,10 @@ return function (App $app) {
 	$app->group('/trade', function (Group $group) {
 		$group->post('/buy', TradeController::class . '::buyAsset');
 		$group->post('/sell', TradeController::class . '::sellAsset');
+	})->add(IsLoggedMiddleware::class);
+
+	$app->group('/portfolio', function(Group $group) {
+		$group->get('', PortfolioController::class . '::getPortfolio');
+		$group->delete('/{asset_id}', PortfolioController::class . '::deleteAsset');
 	})->add(IsLoggedMiddleware::class);
 };
