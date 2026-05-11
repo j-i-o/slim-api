@@ -37,4 +37,9 @@ return function (App $app) {
 		$group->post('/login', AuthController::class . '::login');
 		$group->post('/logout', AuthController::class . '::logout')->add(IsLoggedMiddleware::class);
 	});
+
+	$app->group('/assets', function (Group $group) {
+		$group->get('', AssetController::class . '::getAssets');
+		$group->put('', AssetController::class . '::updateAssetsPrice');
+	});
 };
